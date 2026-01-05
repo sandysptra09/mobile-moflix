@@ -1,4 +1,9 @@
+import { icons } from '@/constants/icons';
+import { fetchMovieDetails, fetchMovieRecommendations } from '@/services/api';
+import { checkIsSaved, saveMovie, unsaveMovie } from '@/services/appwrite';
+import useFetch from '@/services/useFetch';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     Alert,
@@ -11,10 +16,6 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { icons } from '@/constants/icons';
-import { fetchMovieDetails, fetchMovieRecommendations } from '@/services/api';
-import useFetch from '@/services/useFetch';
 
 import MovieCard from '@/components/movie-card';
 
@@ -36,6 +37,9 @@ const Details = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
 
+    const [isSaved, setIsSaved] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
     const { data: movie, loading } = useFetch(() =>
         fetchMovieDetails(id as string)
     );
@@ -43,6 +47,36 @@ const Details = () => {
     const { data: recommendations, loading: recommendationsLoading } = useFetch(() =>
         fetchMovieRecommendations(id as string)
     );
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            if (id) {
+                const status = await checkIsSaved(Number(id));
+                setIsSaved(status);
+            }
+        };
+        checkStatus();
+    }, [id]);
+
+    const toggleSave = async () => {
+        if (isSaving || !movie) return;
+
+        setIsSaving(true);
+        try {
+            if (isSaved) {
+                await unsaveMovie(movie.id);
+                setIsSaved(false);
+            } else {
+                await saveMovie(movie as any);
+                setIsSaved(true);
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error', 'Failed to update watchlist');
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleOpenTrailer = () => {
         const trailer = movie?.videos?.results?.find(
@@ -83,6 +117,18 @@ const Details = () => {
                             source={icons.play}
                             className='w-6 h-7 ml-1'
                             resizeMode='stretch'
+                        />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        className='absolute top-12 right-5 rounded-full size-12 bg-black/50 flex items-center justify-center z-10'
+                        onPress={toggleSave}
+                        disabled={isSaving}
+                    >
+                        <Image
+                            source={icons.save}
+                            className='size-6'
+                            tintColor={isSaved ? '#ef4444' : '#ffffff'}
                         />
                     </TouchableOpacity>
                 </View>

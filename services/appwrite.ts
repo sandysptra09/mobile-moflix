@@ -2,6 +2,7 @@ import { Client, Databases, ID, Query } from 'react-native-appwrite';
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID!;
 
 const client = new Client()
     .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!)
@@ -53,5 +54,93 @@ export const getTrendingMovies = async (): Promise<
     } catch (error) {
         console.error(error);
         return undefined;
+    }
+};
+
+export const getSavedMovies = async (): Promise<Movie[] | undefined> => {
+    try {
+        const result = await database.listDocuments(
+            DATABASE_ID,
+            SAVED_COLLECTION_ID
+        );
+
+        return result.documents.map((doc) => ({
+            id: doc.movie_id,
+            title: doc.title,
+            poster_path: doc.poster_url, 
+            vote_average: parseFloat(doc.vote_average),
+            release_date: doc.release_date,
+            adult: false,
+            backdrop_path: "",
+            genre_ids: [],
+            original_language: "en",
+            original_title: doc.title,
+            overview: "",
+            popularity: 0,
+            video: false,
+            vote_count: 0
+        }));
+    } catch (error) {
+        console.error('Error fetching saved movies:', error);
+        return undefined;
+    }
+};
+
+export const checkIsSaved = async (movieId: number): Promise<boolean> => {
+    try {
+        const result = await database.listDocuments(
+            DATABASE_ID,
+            SAVED_COLLECTION_ID,
+            [Query.equal('movie_id', movieId)] // Cek berdasarkan movie_id
+        );
+
+        return result.documents.length > 0;
+    } catch (error) {
+        console.error('Error checking saved status:', error);
+        return false;
+    }
+};
+
+export const saveMovie = async (movie: MovieDetails) => {
+    try {
+        await database.createDocument(
+            DATABASE_ID,
+            SAVED_COLLECTION_ID,
+            ID.unique(),
+            {
+                movie_id: movie.id,
+                title: movie.title,
+                poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`, // Masukin URL lengkap
+                vote_average: movie.vote_average.toString(), // Convert ke String sesuai settingan DB lu
+                release_date: movie.release_date,
+            }
+        );
+        return true;
+    } catch (error) {
+        console.error('Error saving movie:', error);
+        return false;
+    }
+};
+
+export const unsaveMovie = async (movieId: number) => {
+    try {
+        const result = await database.listDocuments(
+            DATABASE_ID,
+            SAVED_COLLECTION_ID,
+            [Query.equal('movie_id', movieId)]
+        );
+
+        if (result.documents.length > 0) {
+            await database.deleteDocument(
+                DATABASE_ID,
+                SAVED_COLLECTION_ID,
+                result.documents[0].$id
+            );
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error deleting movie:', error);
+        return false;
     }
 };
