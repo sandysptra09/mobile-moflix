@@ -13,8 +13,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { icons } from '@/constants/icons';
-import { fetchMovieDetails } from '@/services/api';
+import { fetchMovieDetails, fetchMovieRecommendations } from '@/services/api';
 import useFetch from '@/services/useFetch';
+
+import MovieCard from '@/components/movie-card';
 
 interface MovieInfoProps {
     label: string;
@@ -38,6 +40,10 @@ const Details = () => {
         fetchMovieDetails(id as string)
     );
 
+    const { data: recommendations, loading: recommendationsLoading } = useFetch(() =>
+        fetchMovieRecommendations(id as string)
+    );
+
     const handleOpenTrailer = () => {
         const trailer = movie?.videos?.results?.find(
             (vid: any) => vid.type === 'Trailer' && vid.site === 'YouTube'
@@ -46,7 +52,7 @@ const Details = () => {
         if (trailer?.key) {
             Linking.openURL(`https://www.youtube.com/watch?v=${trailer.key}`);
         } else {
-            Alert.alert("Sorry", "No trailer available for this movie.");
+            Alert.alert('Sorry', 'No trailer available for this movie.');
         }
     };
 
@@ -159,6 +165,25 @@ const Details = () => {
                             )}
                         />
                     </View>
+
+                    {recommendations && recommendations.length > 0 && (
+                        <View className='mt-4 mb-8 w-full'>
+                            <Text className='text-white font-bold text-lg mb-4'>
+                                More Like This
+                            </Text>
+                            <FlatList
+                                data={recommendations}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={(item) => item.id.toString()}
+                                contentContainerStyle={{ gap: 14 }}
+                                renderItem={({ item }) => (
+                                    <MovieCard {...item} />
+                                )}
+                            />
+                        </View>
+                    )}
+
                 </View>
             </ScrollView>
 
