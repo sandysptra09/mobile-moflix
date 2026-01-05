@@ -1,50 +1,23 @@
-# Welcome to your Expo app 👋
+# 🎬 React Native Movie App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, immersive movie discovery application built with **React Native (Expo)**, **NativeWind**, and **Appwrite**. Browse trending movies, search for your favorites, watch trailers, and manage your personal watchlist with a sleek, dark-themed UI.
 
-## Get started
+## ✨ Features
 
-1. Install dependencies
+- **🔥 Trending & Latest:** Real-time updates on trending and popular movies using TMDB API.
+- **🔍 Smart Search:** Search functionality with debounce and search history tracking.
+- **📄 Detailed Insights:** Comprehensive movie details including cast, crew, budget, revenue, and production info.
+- **🎥 Watch Trailers:** Direct integration to watch official trailers on YouTube.
+- **💡 Smart Recommendations:** "More Like This" section powered by TMDB's similar movie algorithm.
+- **❤️ Personal Watchlist:** Save your favorite movies to a persistent database (Appwrite).
+- **🎨 Immersive UI:** Fully responsive, dark-mode first design with glassmorphism elements.
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Tech Stack
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Framework:** [React Native](https://reactnative.dev/) via [Expo SDK 52](https://expo.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [NativeWind](https://www.nativewind.dev/) (Tailwind CSS)
+- **Routing:** [Expo Router](https://docs.expo.dev/router/introduction/)
+- **Backend / Database:** [Appwrite](https://appwrite.io/)
+- **Data Source:** [TMDB API](https://www.themoviedb.org/)
+- **Fonts:** Google Fonts (DM Sans)
