@@ -24,6 +24,21 @@ interface TrendingMovie {
   poster_url: string;
 }
 
+interface Cast {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
 interface MovieDetails {
   adult: boolean;
   backdrop_path: string | null;
@@ -70,6 +85,17 @@ interface MovieDetails {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  credits: {
+    cast: Cast[];
+    crew: any[]; 
+  };
+  videos?: {
+    results: {
+      key: string;
+      site: string;
+      type: string;
+    }[];
+  };
 }
 
 interface TrendingCardProps {
