@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import MovieCard from '@/components/movie-card';
 import { icons } from '@/constants/icons';
 import { images } from '@/constants/images';
-import { getSavedMovies } from '@/services/appwrite'; // Import function yang baru kita update
+import { getSavedMovies } from '@/services/appwrite';
 import useFetch from '@/services/useFetch';
 
 const Saved = () => {
@@ -19,14 +19,14 @@ const Saved = () => {
     );
 
     return (
-        <SafeAreaView className='bg-primary flex-1'>
-            <View className='flex-1'>
-                <Image
-                    source={images.bg}
-                    className='absolute w-full h-full z-0'
-                    resizeMode='cover'
-                />
+        <View className='bg-primary flex-1'>
+            <Image
+                source={images.bg}
+                className='absolute w-full h-full z-0'
+                resizeMode='cover'
+            />
 
+            <SafeAreaView className='flex-1'>
                 <View className='px-5 mt-5 mb-5'>
                     <Text className='text-2xl font-bold text-white'>My Watchlist</Text>
                 </View>
@@ -50,7 +50,6 @@ const Saved = () => {
                             marginBottom: 16,
                         }}
                         renderItem={({ item }) => <MovieCard {...item} />}
-
                         ListEmptyComponent={
                             <View className='flex-1 justify-center items-center mt-20'>
                                 <Image
@@ -68,8 +67,8 @@ const Saved = () => {
                         }
                     />
                 )}
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </View>
     );
 };
 
